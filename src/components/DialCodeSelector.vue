@@ -70,11 +70,41 @@ function applyInitialSelection() {
 const filtered = computed(() => {
     const q = search.value.trim().toLowerCase();
     if (!q) return options.value;
-    
-    return options.value.filter(
-        (o) => o.name.toLowerCase().includes(q) || o.alpha2.includes(q)
+
+    // 判断输入的是数字还是字母
+    const isNumeric = /^\d+$/.test(q.replace('+', ''));
+
+    // 精确匹配 dialCode, alpha2, name
+    const exactMatches = options.value.filter(
+        (o) => isNumeric ? o.dialCode.toLowerCase() === q : (o.alpha2 === q || o.name.toLowerCase() === q)
     );
+
+    // 模糊匹配 dialCode, alpha2, name，排除精确匹配的结果
+    const fuzzyMatches = options.value.filter(
+        (o) => isNumeric ? o.dialCode.toLowerCase().includes(q) : (o.name.toLowerCase().includes(q) || o.alpha2.includes(q))
+    ).filter(o => !exactMatches.includes(o));
+
+    // 对模糊匹配的结果进行排序，确保搜索的字母在前面的国家排在前面
+    fuzzyMatches.sort((a, b) => {
+        const aIndex = isNumeric ? a.dialCode.toLowerCase().indexOf(q) : a.name.toLowerCase().indexOf(q);
+        const bIndex = isNumeric ? b.dialCode.toLowerCase().indexOf(q) : b.name.toLowerCase().indexOf(q);
+
+        if (aIndex === -1 && bIndex === -1) {
+            return isNumeric ? a.dialCode.localeCompare(b.dialCode) : a.name.localeCompare(b.name);
+        } else if (aIndex === -1) {
+            return 1;
+        } else if (bIndex === -1) {
+            return -1;
+        } else {
+            return aIndex - bIndex;
+        }
+    });
+
+    // 合并结果，确保精确匹配的结果在前面
+    return exactMatches.concat(fuzzyMatches);
 });
+
+
 
 // 选择国家
 function pick(o: CountryOption) {
