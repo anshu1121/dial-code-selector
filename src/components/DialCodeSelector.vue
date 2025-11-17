@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, defineProps } from "vue";
+import { ref, computed, onMounted, defineProps, nextTick } from "vue";
 import countries from "i18n-iso-countries";
 import en from "i18n-iso-countries/langs/en.json";
 import { getCountryCallingCode } from "libphonenumber-js";
@@ -40,6 +40,7 @@ const options = ref<CountryOption[]>([]);
 const search = ref("");
 const open = ref(false);
 const selected = ref<SelectedValue | null>(null);
+const panelScrollTop = ref(0);
 
 // 生成国家选项列表
 const generateCountryOptions = () => {
@@ -126,12 +127,25 @@ function pick(o: CountryOption) {
     selected.value = v;
     emit("select", v);
     open.value = false;
+
+    // 记住选择后的滚动位置
+    const panel = cdcsContainer.value?.querySelector('.cdcs-list');
+    if (panel) {
+        panelScrollTop.value = panel.scrollTop;
+    }
 }
 
 function toggle() {
     open.value = !open.value;
     if (open.value) {
         positionPanel();
+
+        nextTick(() => {
+            const panel = cdcsContainer.value?.querySelector('.cdcs-list');
+            if (panel) {
+                panel.scrollTop = panelScrollTop.value;
+            }
+        });
     }
 }
 
@@ -165,6 +179,7 @@ function clearSelection() {
     selected.value = null;
     emit("select", null);
     showDeleteButton.value = false;
+    panelScrollTop.value = 0;
 }
 
 onMounted(() => {
@@ -235,6 +250,7 @@ onMounted(() => {
                         v-for="o in filtered"
                         :key="o.alpha2"
                         class="cdcs-item"
+                        :class="{'highlight': o.alpha2 === selected?.alpha2}"
                         @click="pick(o)">
                         <span
                             class="fi"
@@ -344,7 +360,9 @@ onMounted(() => {
                 &:hover {
                     background: #f6f6f6;
                 }
-
+                &.highlight {
+                    background: #e0f7fa; /* 绿色高亮背景色 */
+                }
                 .fi {
                     width: 1.2em;
                     height: 1.2em;
