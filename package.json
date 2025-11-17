@@ -1,0 +1,48 @@
+{
+  "name": "dial-code-selector",
+  "private": false,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "main": "dist/dial-code-selector.umd.cjs",
+  "module": "dist/dial-code-selector.js",
+  "exports": {
+    ".": {
+      "import": "./dist/dial-code-selector.js",
+      "require": "./dist/dial-code-selector.umd.cjs"
+    }
+  },
+  "files": ["dist", "README.md", "package.json"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anshu1121/dial-code-selector.git"
+  },
+  "keywords": [
+    "vue",
+    "component",
+    "dial",
+    "code",
+    "selector"
+  ],
+  "author": "anshu",
+  "peerDependencies": {
+    "vue": ">=3.2.0"
+  },
+  "dependencies": {
+    "flag-icons": "^7.5.0",
+    "i18n-iso-countries": "^7.14.0",
+    "libphonenumber-js": "^1.12.26"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.2",
+    "vue-tsc": "^3.1.3"
+  }
+}
