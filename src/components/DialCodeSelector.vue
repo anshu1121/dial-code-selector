@@ -119,27 +119,29 @@ onMounted(() => {
                 >{{ props.placeholder }}</span>
             <span class="cdcs-arrow">▾</span>
         </div>
-        <div
-            :class="['cdcs-panel', props.panelClass]"
-            v-show="open">
-            <input
-                class="cdcs-search"
-                v-model="search"
-                placeholder="Search" />
-            <ul class="cdcs-list">
-                <li
-                    v-for="o in filtered"
-                    :key="o.alpha2"
-                    class="cdcs-item"
-                    @click="pick(o)">
-                    <span
-                        class="fi"
-                        :class="'fi-' + o.alpha2" />
-                    <span class="cdcs-name">{{ o.name }}</span>
-                    <span class="cdcs-dial">{{ o.dialCode }}</span>
-                </li>
-            </ul>
-        </div>
+        <transition name="cdcs-panel">
+            <div
+                :class="['cdcs-panel', props.panelClass]"
+                v-if="open">
+                <input
+                    class="cdcs-search"
+                    v-model="search"
+                    placeholder="Search" />
+                <ul class="cdcs-list">
+                    <li
+                        v-for="o in filtered"
+                        :key="o.alpha2"
+                        class="cdcs-item"
+                        @click="pick(o)">
+                        <span
+                            class="fi"
+                            :class="'fi-' + o.alpha2" />
+                        <span class="cdcs-name">{{ o.name }}</span>
+                        <span class="cdcs-dial">{{ o.dialCode }}</span>
+                    </li>
+                </ul>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -220,5 +222,21 @@ onMounted(() => {
 .cdcs-dial {
     color: #333;
     font-weight: 500;
+}
+
+/* 过渡效果 */
+.cdcs-panel-enter-active,
+.cdcs-panel-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.cdcs-panel-enter-from,
+.cdcs-panel-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.cdcs-panel-enter-to,
+.cdcs-panel-leave-from {
+    opacity: 1;
+    transform: translateY(0);
 }
 </style>
