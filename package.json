@@ -16,7 +16,11 @@
       "require": "./dist/dial-code-selector.umd.cjs"
     }
   },
-  "files": ["dist", "README.md", "package.json"],
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anshu1121/dial-code-selector.git"
@@ -35,12 +39,14 @@
   "dependencies": {
     "flag-icons": "^7.5.0",
     "i18n-iso-countries": "^7.14.0",
-    "libphonenumber-js": "^1.12.26"
+    "libphonenumber-js": "^1.12.26",
+    "sass": "^1.94.0"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
+    "sass": "^1.94.0",
     "typescript": "~5.9.3",
     "vite": "^7.2.2",
     "vue-tsc": "^3.1.3"

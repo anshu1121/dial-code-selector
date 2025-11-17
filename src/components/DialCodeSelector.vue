@@ -4,32 +4,36 @@ import countries from "i18n-iso-countries";
 import en from "i18n-iso-countries/langs/en.json";
 import { getCountryCallingCode } from "libphonenumber-js";
 
-type CountryCode = keyof typeof en.countries | Lowercase<keyof typeof en.countries>;
+type CountryCode =
+    | keyof typeof en.countries
+    | Lowercase<keyof typeof en.countries>;
 
 // 类型定义
-type SelectedValue = { 
+type SelectedValue = {
     alpha2: string; // 国家简称
     dialCode: string; // 电话区号
 };
 
 type CountryOption = {
     alpha2: string; // 国家简称
-    name: string;   // 国家全称
-    dialCode: string;   // 电话区号
+    name: string; // 国家全称
+    dialCode: string; // 电话区号
 };
 
 type Props = {
-    defaultValue?: CountryCode;  // 国家代码，如 'us', 'cn'
+    defaultValue?: CountryCode; // 国家代码，如 'us', 'cn'
     selectorClass?: string; // 下拉框类名
     panelClass?: string; // 下拉面板类名
     placeholder?: string; // 下拉框提示文字
+    clearable?: boolean; // 是否显示清除按钮
+    select?: (v: SelectedValue | null) => void; // 选择回调函数
 };
 
 const props = withDefaults(defineProps<Props>(), {
-    placeholder: 'select country'
+    placeholder: "select",
 });
 const emit = defineEmits<{
-    (e: "select", v: SelectedValue): void;
+    (e: "select", v: SelectedValue | null): void;
 }>();
 
 const options = ref<CountryOption[]>([]);
@@ -40,9 +44,9 @@ const selected = ref<SelectedValue | null>(null);
 // 生成国家选项列表
 const generateCountryOptions = () => {
     countries.registerLocale(en);
-    const names = countries.getNames("en", { select: "alias" }) as Record<string, string>;
+    const names = countries.getNames("en", { select: "alias" });
     const arr: CountryOption[] = [];
-    
+
     Object.entries(names).forEach(([code, name]) => {
         try {
             const dialCode = "+" + String(getCountryCallingCode(code as any));
@@ -50,7 +54,7 @@ const generateCountryOptions = () => {
             arr.push({ alpha2, name, dialCode });
         } catch {}
     });
-    
+
     arr.sort((a, b) => a.name.localeCompare(b.name));
     options.value = arr;
 };
@@ -58,7 +62,7 @@ const generateCountryOptions = () => {
 // 应用默认选择
 function applyInitialSelection() {
     if (!props.defaultValue) return;
-    
+
     const alpha2 = props.defaultValue.toLowerCase();
     const found = options.value.find((o) => o.alpha2 === alpha2);
     if (found) {
@@ -72,25 +76,37 @@ const filtered = computed(() => {
     if (!q) return options.value;
 
     // 判断输入的是数字还是字母
-    const isNumeric = /^\d+$/.test(q.replace('+', ''));
+    const isNumeric = /^\d+$/.test(q.replace("+", ""));
 
     // 精确匹配 dialCode, alpha2, name
-    const exactMatches = options.value.filter(
-        (o) => isNumeric ? o.dialCode.toLowerCase() === q : (o.alpha2 === q || o.name.toLowerCase() === q)
+    const exactMatches = options.value.filter((o) =>
+        isNumeric
+            ? o.dialCode.toLowerCase() === q
+            : o.alpha2 === q || o.name.toLowerCase() === q
     );
 
     // 模糊匹配 dialCode, alpha2, name，排除精确匹配的结果
-    const fuzzyMatches = options.value.filter(
-        (o) => isNumeric ? o.dialCode.toLowerCase().includes(q) : (o.name.toLowerCase().includes(q) || o.alpha2.includes(q))
-    ).filter(o => !exactMatches.includes(o));
+    const fuzzyMatches = options.value
+        .filter((o) =>
+            isNumeric
+                ? o.dialCode.toLowerCase().includes(q)
+                : o.name.toLowerCase().includes(q) || o.alpha2.includes(q)
+        )
+        .filter((o) => !exactMatches.includes(o));
 
     // 对模糊匹配的结果进行排序，确保搜索的字母在前面的国家排在前面
     fuzzyMatches.sort((a, b) => {
-        const aIndex = isNumeric ? a.dialCode.toLowerCase().indexOf(q) : a.name.toLowerCase().indexOf(q);
-        const bIndex = isNumeric ? b.dialCode.toLowerCase().indexOf(q) : b.name.toLowerCase().indexOf(q);
+        const aIndex = isNumeric
+            ? a.dialCode.toLowerCase().indexOf(q)
+            : a.name.toLowerCase().indexOf(q);
+        const bIndex = isNumeric
+            ? b.dialCode.toLowerCase().indexOf(q)
+            : b.name.toLowerCase().indexOf(q);
 
         if (aIndex === -1 && bIndex === -1) {
-            return isNumeric ? a.dialCode.localeCompare(b.dialCode) : a.name.localeCompare(b.name);
+            return isNumeric
+                ? a.dialCode.localeCompare(b.dialCode)
+                : a.name.localeCompare(b.name);
         } else if (aIndex === -1) {
             return 1;
         } else if (bIndex === -1) {
@@ -103,8 +119,6 @@ const filtered = computed(() => {
     // 合并结果，确保精确匹配的结果在前面
     return exactMatches.concat(fuzzyMatches);
 });
-
-
 
 // 选择国家
 function pick(o: CountryOption) {
@@ -136,20 +150,27 @@ function positionPanel() {
             // 面板向下展开会超出视口，向上展开
             // 这里假设通过添加特定类来实现向上展开
             // 你需要在 CSS 中定义相应的样式
-            cdcsContainer.value.classList.add('panel-up');
-            cdcsContainer.value.classList.remove('panel-down');
+            cdcsContainer.value.classList.add("panel-up");
+            cdcsContainer.value.classList.remove("panel-down");
         } else {
             // 否则，向下展开
-            cdcsContainer.value.classList.add('panel-down');
-            cdcsContainer.value.classList.remove('panel-up');
+            cdcsContainer.value.classList.add("panel-down");
+            cdcsContainer.value.classList.remove("panel-up");
         }
     }
+}
+const showDeleteButton = ref(false);
+
+function clearSelection() {
+    selected.value = null;
+    emit("select", null);
+    showDeleteButton.value = false;
 }
 
 onMounted(() => {
     generateCountryOptions();
     applyInitialSelection();
-    
+
     document.addEventListener("click", (e: any) => {
         if (!e?.target?.closest(".cdcs")) {
             open.value = false;
@@ -159,23 +180,47 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="cdcs" ref="cdcsContainer">
+    <div
+        class="cdcs"
+        ref="cdcsContainer">
         <div
             :class="['cdcs-display', props.selectorClass]"
-            @click.stop="toggle">
-            <span
-                v-if="selected"
-                class="fi"
-                :class="'fi-' + selected.alpha2" />
-            <span
-                v-if="selected"
-                class="cdcs-code"
-                >{{ selected.dialCode }}</span>
+            @click.stop="toggle"
+            @mouseover="showDeleteButton = true"
+            @mouseleave="showDeleteButton = false">
+            <template v-if="selected">
+                <span
+                    class="fi"
+                    :class="'fi-' + selected.alpha2" />
+                <span
+                    class="cdcs-code"
+                    >{{ selected.dialCode }}</span
+                >
+            </template>
             <span
                 v-else
                 class="cdcs-placeholder"
                 >{{ props.placeholder }}</span>
-            <span class="cdcs-arrow">▾</span>
+            
+            <div class="cdcs-icon">
+                <span
+                    v-if="clearable && selected && showDeleteButton"
+                    class="cdcs-delete"
+                    @click.stop="clearSelection">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24">
+                        <path
+                            fill="#333"
+                            d="M8.4 17L7 15.6l3.6-3.6L7 8.425l1.4-1.4l3.6 3.6l3.575-3.6l1.4 1.4l-3.6 3.575l3.6 3.6l-1.4 1.4L12 13.4z" />
+                    </svg>
+                </span>
+                <span :class="['cdcs-arrow', { rotate: open }]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="#000" d="m12.37 15.835l6.43-6.63C19.201 8.79 18.958 8 18.43 8H5.57c-.528 0-.771.79-.37 1.205l6.43 6.63c.213.22.527.22.74 0"/></svg>
+                </span>
+            </div>
         </div>
         <transition name="cdcs-panel">
             <div
@@ -203,84 +248,117 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped>
-/* 样式保持不变 */
+<style scoped lang="scss">
 .cdcs {
     position: relative;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     text-align: left;
     overflow: visible;
+
+    .cdcs-display {
+        min-width: 100px;
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 4px 10px;
+        cursor: pointer;
+        background: #fff;
+
+        .cdcs-placeholder {
+            color: #888;
+        }
+        .cdcs-code {
+            font-weight: 600;
+        }
+        
+        .cdcs-icon {
+            display: flex;
+            margin-left: auto;
+
+            .cdcs-arrow {
+                display: flex;
+                color: #666;
+                transition: all 0.2s ease-in-out;
+                transform-origin: center;
+
+                &.rotate {
+                    transform: rotate(180deg);
+                }
+            }
+            .cdcs-delete {
+                display: flex;
+                background: none;
+                border: none;
+                cursor: pointer;
+                opacity: 0.3;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .cdcs-panel {
+        min-width: 300px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        border: 1px solid #ddd;
+        background: #fff;
+        border-radius: 6px;
+        margin-top: 6px;
+        z-index: 10;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        text-align: left;
+        overflow: hidden;
+
+        .cdcs-search {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-bottom: 1px solid #eee;
+            outline: none;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .cdcs-list {
+            max-height: 280px;
+            overflow: auto;
+            list-style: none;
+            margin: 0;
+            padding: 6px;
+
+            .cdcs-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px;
+                border-radius: 6px;
+                cursor: pointer;
+
+                &:hover {
+                    background: #f6f6f6;
+                }
+
+                .fi {
+                    width: 1.2em;
+                    height: 1.2em;
+                }
+
+                .cdcs-dial {
+                    color: #333;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
 }
-.cdcs-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 8px 10px;
-    cursor: pointer;
-    background: #fff;
-}
-.cdcs-placeholder {
-    color: #888;
-}
-.cdcs-code {
-    font-weight: 600;
-}
-.cdcs-arrow {
-    margin-left: auto;
-    color: #666;
-}
-.cdcs-panel {
-    width: 300px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    border: 1px solid #ddd;
-    background: #fff;
-    border-radius: 6px;
-    margin-top: 6px;
-    z-index: 10;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    text-align: left;
-    overflow: hidden;
-}
-.cdcs-search {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-bottom: 1px solid #eee;
-    outline: none;
-    box-sizing: border-box;
-    font-size: 16px;
-}
-.cdcs-list {
-    max-height: 280px;
-    overflow: auto;
-    list-style: none;
-    margin: 0;
-    padding: 6px;
-}
-.cdcs-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.cdcs-item:hover {
-    background: #f6f6f6;
-}
-.fi {
-    width: 1.2em;
-    height: 1.2em;
-}
-.cdcs-dial {
-    color: #333;
-    font-weight: 500;
-}
+
 .panel-up .cdcs-panel {
     top: auto;
     bottom: calc(100% + 10px);

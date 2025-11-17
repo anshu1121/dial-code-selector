@@ -16,7 +16,8 @@ export default defineConfig({
           vue: 'Vue',
           'i18n-iso-countries': 'i18nIsoCountries',
           'libphonenumber-js': 'libphonenumberJs',
-          'flag-icons': 'flagIcons'
+          'flag-icons': 'flagIcons',
+          'sass': 'Sass'
         }
       }
     }

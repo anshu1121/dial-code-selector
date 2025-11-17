@@ -2,21 +2,20 @@
 import { ref } from 'vue'
 import DialCodeSelector from './components/DialCodeSelector.vue'
 
-const value = ref<{ alpha2: string; dialCode: string } | null>(null)
+const value = ref()
 
-const handleSelect = (v: { alpha2: string; dialCode: string }) => {
+const handleSelect = (v: any) => {
   value.value = v
-  console.log(v);
-  
 }
 </script>
 
 <template>
   <div class="demo">
-    <DialCodeSelector @select="handleSelect" />
+    <DialCodeSelector clearable @select="handleSelect" />
     <div class="preview">
       <span v-if="value" class="fi" :class="'fi-' + value.alpha2" />
       <span v-if="value" class="dial">{{ value.dialCode }}</span>
+      <span v-if="value" class="name">{{ value.name }}</span>
     </div>
   </div>
 </template>
