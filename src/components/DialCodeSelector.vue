@@ -86,6 +86,34 @@ function pick(o: CountryOption) {
 
 function toggle() {
     open.value = !open.value;
+    if (open.value) {
+        positionPanel();
+    }
+}
+
+const cdcsContainer = ref<HTMLElement | null>(null);
+const panelTop = ref(0);
+const panelBottom = ref(0);
+
+function positionPanel() {
+    if (cdcsContainer.value) {
+        const { top, bottom } = cdcsContainer.value.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const panelHeight = 340; // 假设面板高度为300px
+        panelTop.value = top + windowHeight;
+        panelBottom.value = bottom + panelHeight;
+        if (panelBottom.value > windowHeight) {
+            // 面板向下展开会超出视口，向上展开
+            // 这里假设通过添加特定类来实现向上展开
+            // 你需要在 CSS 中定义相应的样式
+            cdcsContainer.value.classList.add('panel-up');
+            cdcsContainer.value.classList.remove('panel-down');
+        } else {
+            // 否则，向下展开
+            cdcsContainer.value.classList.add('panel-down');
+            cdcsContainer.value.classList.remove('panel-up');
+        }
+    }
 }
 
 onMounted(() => {
@@ -101,7 +129,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="cdcs">
+    <div class="cdcs" ref="cdcsContainer">
         <div
             :class="['cdcs-display', props.selectorClass]"
             @click.stop="toggle">
@@ -223,6 +251,10 @@ onMounted(() => {
     color: #333;
     font-weight: 500;
 }
+.panel-up .cdcs-panel {
+    top: auto;
+    bottom: calc(100% + 10px);
+}
 
 /* 过渡效果 */
 .cdcs-panel-enter-active,
@@ -238,5 +270,10 @@ onMounted(() => {
 .cdcs-panel-leave-from {
     opacity: 1;
     transform: translateY(0);
+}
+.panel-up .cdcs-panel-enter-from,
+.panel-up .cdcs-panel-leave-to {
+    opacity: 0;
+    transform: translateY(10px); /* 修改为向上移动 */
 }
 </style>
