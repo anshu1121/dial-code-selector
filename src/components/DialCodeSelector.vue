@@ -288,7 +288,7 @@ onMounted(() => {
 }
 
 .cdcs-code {
-    font-weight: 600;
+    margin-left: 3px;
 }
 
 .cdcs-icon {
@@ -338,12 +338,12 @@ onMounted(() => {
 
 .cdcs-search {
     width: 100%;
-    padding: 12px;
+    padding: 10px 12px;
     border: none;
     border-bottom: 1px solid #eee;
     outline: none;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .cdcs-list {
@@ -369,11 +369,6 @@ onMounted(() => {
 
 .cdcs-item.highlight {
     background: #e0f7fa; /* 绿色高亮背景色 */
-}
-
-.fi {
-    width: 1.2em;
-    height: 1.2em;
 }
 
 .cdcs-dial {
