@@ -56,6 +56,12 @@ const handleSelect = (value) => {
 | --- | --- | --- | --- |
 | select | 当用户选择一个国家时触发。事件对象包含 alpha2 (国家代码)、dialCode (电话区号) | function(value: { alpha2: string; dialCode: string }) | 否 |
 
+## 插槽
+
+| 插槽名 | 说明 | 是否必填 |
+| --- | --- | --- |
+| empty | 无匹配结果时显示的内容 | 否 |
+
 ## 依赖
 
 - [flag-icons](https://github.com/lipis/flag-icons)

@@ -259,7 +259,9 @@ onMounted(() => {
                         <span class="cdcs-dial">{{ o.dialCode }}</span>
                     </li>
                 </ul>
-                <div v-else class="cdcs-empty">No results found</div>
+                <slot v-else name="empty">
+                    <div class="cdcs-empty">No results found</div>
+                </slot>
             </div>
         </transition>
     </div>
