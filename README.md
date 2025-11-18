@@ -44,7 +44,7 @@ const handleSelect = (value) => {
 
 | 属性名 | 类型 | 默认值 | 说明 | 是否必填 |
 | --- | --- | --- | --- | --- |
-| defaultValue | string |  | 默认选中国家的国家代码，使用国家缩写如：cn, us | 否 |
+| defaultValue | string |  | 默认选中国家的代码，使用国家代码如：cn, us | 否 |
 | selectorClass | string |  | 选择器容器类名 | 否 |
 | panelClass | string |  | 选择器面板类名 | 否 |
 | placeholder | string | 'select country' | placehlder | 否 |
@@ -54,7 +54,7 @@ const handleSelect = (value) => {
 
 | 事件名 | 说明 | 回调参数 | 是否必填 |
 | --- | --- | --- | --- |
-| select | 当用户选择一个国家时触发。事件对象包含 alpha2 (国家代码)、dialCode (电话区号)、name(国家名称) | function(value: { alpha2: string; dialCode: string, name: string }) | 否 |
+| select | 当用户选择一个国家时触发。事件对象包含 alpha2 (国家代码)、dialCode (电话区号) | function(value: { alpha2: string; dialCode: string }) | 否 |
 
 ## 依赖
 

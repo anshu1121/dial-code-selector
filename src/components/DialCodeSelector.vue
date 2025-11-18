@@ -10,12 +10,12 @@ type CountryCode =
 
 // 类型定义
 type SelectedValue = {
-    alpha2: string; // 国家简称
+    alpha2: string; // 国家代码
     dialCode: string; // 电话区号
 };
 
 type CountryOption = {
-    alpha2: string; // 国家简称
+    alpha2: string; // 国家代码
     name: string; // 国家全称
     dialCode: string; // 电话区号
 };
