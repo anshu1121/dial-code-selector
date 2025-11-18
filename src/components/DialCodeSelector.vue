@@ -264,7 +264,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped>
+<style>
 .cdcs {
     position: relative;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -288,7 +288,8 @@ onMounted(() => {
 }
 
 .cdcs-code {
-    margin-left: 3px;
+    margin: 0 3px;
+    font-size: 14px;
 }
 
 .cdcs-icon {
