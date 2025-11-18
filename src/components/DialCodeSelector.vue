@@ -245,7 +245,7 @@ onMounted(() => {
                     class="cdcs-search"
                     v-model="search"
                     placeholder="Search" />
-                <ul class="cdcs-list">
+                <ul v-if="filtered?.length > 0" class="cdcs-list">
                     <li
                         v-for="o in filtered"
                         :key="o.alpha2"
@@ -259,6 +259,7 @@ onMounted(() => {
                         <span class="cdcs-dial">{{ o.dialCode }}</span>
                     </li>
                 </ul>
+                <div v-else class="cdcs-empty">No results found</div>
             </div>
         </transition>
     </div>
@@ -267,9 +268,8 @@ onMounted(() => {
 <style>
 .cdcs {
     position: relative;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     text-align: left;
-    overflow: visible;
+    overflow: visible !important;
 }
 
 .cdcs-display {
@@ -334,7 +334,7 @@ onMounted(() => {
     z-index: 10;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
     text-align: left;
-    overflow: hidden;
+    overflow: hidden!important;
 }
 
 .cdcs-search {
@@ -374,7 +374,14 @@ onMounted(() => {
 
 .cdcs-dial {
     color: #333;
-    font-weight: 500;
+}
+
+.cdcs-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    color: #888;
 }
 
 .panel-up .cdcs-panel {
