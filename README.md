@@ -5,7 +5,7 @@
 ## 安装
 
 ```bash
-npm install dial-code-selector
+npm install dial-code-selector flag-icons
 ```
 
 ## 使用

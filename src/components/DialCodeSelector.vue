@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, defineProps, nextTick } from "vue";
+import { ref, computed, onMounted, nextTick } from "vue";
 import countries from "i18n-iso-countries";
 import en from "i18n-iso-countries/langs/en.json";
 import { getCountryCallingCode } from "libphonenumber-js";
@@ -264,117 +264,121 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .cdcs {
     position: relative;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     text-align: left;
     overflow: visible;
+}
 
-    .cdcs-display {
-        min-width: 100px;
-        display: flex;
-        align-items: center;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        padding: 4px 10px;
-        cursor: pointer;
-        background: #fff;
+.cdcs-display {
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    background: #fff;
+}
 
-        .cdcs-placeholder {
-            color: #888;
-        }
-        .cdcs-code {
-            font-weight: 600;
-        }
-        
-        .cdcs-icon {
-            display: flex;
-            margin-left: auto;
+.cdcs-placeholder {
+    color: #888;
+}
 
-            .cdcs-arrow {
-                display: flex;
-                color: #666;
-                transition: all 0.2s ease-in-out;
-                transform-origin: center;
+.cdcs-code {
+    font-weight: 600;
+}
 
-                &.rotate {
-                    transform: rotate(180deg);
-                }
-            }
-            .cdcs-delete {
-                display: flex;
-                background: none;
-                border: none;
-                cursor: pointer;
-                opacity: 0.3;
-                transition: all 0.2s ease;
+.cdcs-icon {
+    display: flex;
+    margin-left: auto;
+}
 
-                &:hover {
-                    opacity: 1;
-                }
-            }
-        }
-    }
+.cdcs-arrow {
+    display: flex;
+    color: #666;
+    transition: all 0.2s ease-in-out;
+    transform-origin: center;
+}
 
-    .cdcs-panel {
-        min-width: 300px;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        border: 1px solid #ddd;
-        background: #fff;
-        border-radius: 6px;
-        margin-top: 6px;
-        z-index: 10;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-        text-align: left;
-        overflow: hidden;
+.cdcs-arrow.rotate {
+    transform: rotate(180deg);
+}
 
-        .cdcs-search {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-bottom: 1px solid #eee;
-            outline: none;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
+.cdcs-delete {
+    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.2s ease;
+}
 
-        .cdcs-list {
-            max-height: 280px;
-            overflow: auto;
-            list-style: none;
-            margin: 0;
-            padding: 6px;
+.cdcs-delete:hover {
+    opacity: 1;
+}
 
-            .cdcs-item {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                padding: 8px;
-                border-radius: 6px;
-                cursor: pointer;
+.cdcs-panel {
+    min-width: 300px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 6px;
+    margin-top: 6px;
+    z-index: 10;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    text-align: left;
+    overflow: hidden;
+}
 
-                &:hover {
-                    background: #f6f6f6;
-                }
-                &.highlight {
-                    background: #e0f7fa; /* 绿色高亮背景色 */
-                }
-                .fi {
-                    width: 1.2em;
-                    height: 1.2em;
-                }
+.cdcs-search {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-bottom: 1px solid #eee;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 16px;
+}
 
-                .cdcs-dial {
-                    color: #333;
-                    font-weight: 500;
-                }
-            }
-        }
-    }
+.cdcs-list {
+    max-height: 280px;
+    overflow: auto;
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+}
+
+.cdcs-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cdcs-item:hover {
+    background: #f6f6f6;
+}
+
+.cdcs-item.highlight {
+    background: #e0f7fa; /* 绿色高亮背景色 */
+}
+
+.fi {
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.cdcs-dial {
+    color: #333;
+    font-weight: 500;
 }
 
 .panel-up .cdcs-panel {
@@ -382,24 +386,27 @@ onMounted(() => {
     bottom: calc(100% + 10px);
 }
 
-/* 过渡效果 */
 .cdcs-panel-enter-active,
 .cdcs-panel-leave-active {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .cdcs-panel-enter-from,
 .cdcs-panel-leave-to {
     opacity: 0;
     transform: translateY(-10px);
 }
+
 .cdcs-panel-enter-to,
 .cdcs-panel-leave-from {
     opacity: 1;
     transform: translateY(0);
 }
+
 .panel-up .cdcs-panel-enter-from,
 .panel-up .cdcs-panel-leave-to {
     opacity: 0;
     transform: translateY(10px); /* 修改为向上移动 */
 }
 </style>
+
