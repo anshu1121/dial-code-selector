@@ -16,11 +16,12 @@ export default defineConfig({
           vue: 'Vue',
           'i18n-iso-countries': 'i18nIsoCountries',
           'libphonenumber-js': 'libphonenumberJs',
-          'flag-icons': 'flagIcons',
-          'sass': 'Sass'
+          'flag-icons': 'flagIcons'
         }
       }
-    }
+    },
+    // 新增：确保 CSS 被单独提取（而非内联到 JS 中）
+    cssCodeSplit: true
   },
   server: {
     port: 3100,

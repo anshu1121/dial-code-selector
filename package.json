@@ -1,7 +1,7 @@
 {
   "name": "dial-code-selector",
   "private": false,
-  "version": "0.2.0",
+  "version": "0.8.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,12 +12,15 @@
   "module": "dist/dial-code-selector.js",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./dist/dial-code-selector.js",
       "require": "./dist/dial-code-selector.umd.cjs"
-    }
+    },
+    "./dist/index.css": "./dist/index.css"
   },
   "files": [
     "dist",
+    "index.d.ts",
     "README.md",
     "package.json"
   ],

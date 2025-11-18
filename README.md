@@ -10,6 +10,13 @@ npm install dial-code-selector
 
 ## 使用
 
+导入样式文件
+
+```js
+import 'dial-code-selector/dist/index.css';
+import 'flag-icons/css/flag-icons.min.css';
+```
+
 在你的Vue 3项目中，可以在任何Vue组件中使用 DialCodeSelector 组件：
 
 ```vue
@@ -35,19 +42,19 @@ const handleSelect = (value) => {
 
 ## 属性
 
-| 属性名 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| defaultValue | string |  | 默认选中国家，使用国家缩写如：cn, en |
-| selectorClass | string |  | 选择器容器类名 |
-| panelClass | string |  | 选择器面板类名 |
-| placeholder | string | 'select country' | placehlder |
-| clearable | boolean | false | 是否显示清除按钮 |
+| 属性名 | 类型 | 默认值 | 说明 | 是否必填 |
+| --- | --- | --- | --- | --- |
+| defaultValue | string |  | 默认选中国家的国家代码，使用国家缩写如：cn, us | 否 |
+| selectorClass | string |  | 选择器容器类名 | 否 |
+| panelClass | string |  | 选择器面板类名 | 否 |
+| placeholder | string | 'select country' | placehlder | 否 |
+| clearable | boolean | false | 是否显示清除按钮 | 否 |
 
 ## 事件
 
-| 事件名 | 说明 | 回调参数 |
-| --- | --- | --- |
-| select | 当用户选择一个国家时触发。事件对象包含 alpha2 (国家代码)、dialCode (电话区号)、name(国家名称) | function(value: { alpha2: string; dialCode: string, name: string }) |
+| 事件名 | 说明 | 回调参数 | 是否必填 |
+| --- | --- | --- | --- |
+| select | 当用户选择一个国家时触发。事件对象包含 alpha2 (国家代码)、dialCode (电话区号)、name(国家名称) | function(value: { alpha2: string; dialCode: string, name: string }) | 否 |
 
 ## 依赖
 
