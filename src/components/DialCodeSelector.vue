@@ -3,17 +3,7 @@ import { ref, computed, onMounted, nextTick } from "vue";
 import countries from "i18n-iso-countries";
 import en from "i18n-iso-countries/langs/en.json";
 import { getCountryCallingCode } from "libphonenumber-js";
-
-type CountryCode =
-    | keyof typeof en.countries
-    | Lowercase<keyof typeof en.countries>;
-
-// 类型定义
-type SelectedValue = {
-    alpha2: string; // 国家代码
-    dialCode: string; // 电话区号
-    name: string; // 国家全称
-};
+import type { SelectedValue, DialCodeSelectorProps } from '../../index'
 
 type CountryOption = {
     alpha2: string; // 国家代码
@@ -21,17 +11,9 @@ type CountryOption = {
     dialCode: string; // 电话区号
 };
 
-type Props = {
-    defaultValue?: CountryCode; // 国家代码，如 'us', 'cn'
-    selectorClass?: string; // 下拉框类名
-    panelClass?: string; // 下拉面板类名
-    placeholder?: string; // 下拉框提示文字
-    clearable?: boolean; // 是否显示清除按钮
-    select?: (v: SelectedValue | null) => void; // 选择回调函数
-};
-
-const props = withDefaults(defineProps<Props>(), {
+const DialCodeSelectorProps = withDefaults(defineProps<DialCodeSelectorProps>(), {
     placeholder: "select",
+    autoRecog: true,
 });
 const emit = defineEmits<{
     (e: "select", v: SelectedValue | null): void;
@@ -63,9 +45,9 @@ const generateCountryOptions = () => {
 
 // 应用默认选择
 function applyInitialSelection() {
-    if (!props.defaultValue) return;
+    if (!DialCodeSelectorProps.defaultValue) return;
 
-    const alpha2 = props.defaultValue.toLowerCase();
+    const alpha2 = DialCodeSelectorProps.defaultValue.toLowerCase();
     const found = options.value.find((o) => o.alpha2 === alpha2);
     if (found) {
         selected.value = found;
@@ -206,7 +188,7 @@ defineExpose({ getCurrentValue });
 onMounted(() => {
     generateCountryOptions();
     applyInitialSelection();
-    !props.defaultValue && getCodeByIp();
+    DialCodeSelectorProps.autoRecog && !DialCodeSelectorProps.defaultValue && getCodeByIp();
 
     document.addEventListener("click", (e: any) => {
         if (!e?.target?.closest(".cdcs")) {
@@ -221,7 +203,7 @@ onMounted(() => {
         class="cdcs"
         ref="cdcsContainer">
         <div
-            :class="['cdcs-display', props.selectorClass]"
+            :class="['cdcs-display', DialCodeSelectorProps.selectorClass]"
             @click.stop="toggle"
             @mouseover="showDeleteButton = true"
             @mouseleave="showDeleteButton = false">
@@ -237,7 +219,7 @@ onMounted(() => {
             <span
                 v-else
                 class="cdcs-placeholder"
-                >{{ props.placeholder }}</span>
+                >{{ DialCodeSelectorProps.placeholder }}</span>
             
             <div class="cdcs-icon">
                 <span
@@ -261,7 +243,7 @@ onMounted(() => {
         </div>
         <transition name="cdcs-panel">
             <div
-                :class="['cdcs-panel', props.panelClass]"
+                :class="['cdcs-panel', DialCodeSelectorProps.panelClass]"
                 v-if="open">
                 <input
                     class="cdcs-search"

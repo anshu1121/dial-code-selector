@@ -19,6 +19,7 @@ export interface DialCodeSelectorProps {
     panelClass?: string;
     placeholder?: string;
     clearable?: boolean;
+    autoRecog?: boolean;
     select?: (value: SelectedValue | null) => void;
 }
 
