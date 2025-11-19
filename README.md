@@ -21,7 +21,7 @@ import 'flag-icons/css/flag-icons.min.css';
 
 ```vue
 <template>
-  <dial-code-selector @select="handleSelect">
+  <dial-code-selector ref="dialCodeRef" clearable @select="handleSelect">
   <div v-if="selectedValue">
     选择的国家代码: {{ selectedValue.alpha2 }}，电话区号: {{ selectedValue.dialCode }}
   </div>
@@ -31,11 +31,16 @@ import 'flag-icons/css/flag-icons.min.css';
 import { ref } from 'vue';
 import DialCodeSelector from 'dial-code-selector';
 
+const dialCodeRef = ref(null);
 const selectedValue = ref(null);
 
 const handleSelect = (value) => {
   selectedValue.value = value;
   console.log(value);
+  if (dialCodeRef.value) {
+    const info = dialCodeRef.value.getCurrentValue();
+    console.log(info);
+  }
 };
 </script>
 ```
