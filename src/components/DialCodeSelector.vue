@@ -116,6 +116,8 @@ function pick(o: CountryOption) {
     if (panel) {
         panelScrollTop.value = panel.scrollTop;
     }
+    // 清除搜索框内容
+    search.value = "";
 }
 
 function toggle() {
