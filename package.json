@@ -33,8 +33,14 @@
     "component",
     "dial",
     "code",
-    "selector"
+    "selector",
+    "country",
+    "phone",
+    "number",
+    "vue3",
+    "typescript"
   ],
+  "license": "MIT",
   "author": "anshu",
   "peerDependencies": {
     "vue": ">=3.2.0"

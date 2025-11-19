@@ -12,6 +12,7 @@ type CountryCode =
 type SelectedValue = {
     alpha2: string; // 国家代码
     dialCode: string; // 电话区号
+    name: string; // 国家全称
 };
 
 type CountryOption = {
@@ -182,9 +183,30 @@ function clearSelection() {
     panelScrollTop.value = 0;
 }
 
+// 通过ip识别国家
+const getCodeByIp = () => {
+    fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => {
+            const alpha2 = data.country_code.toLowerCase();
+            const found = options.value.find((o) => o.alpha2 === alpha2);
+            if (found) {
+                selected.value = found;
+            }
+        }).catch(() => {
+        });
+}
+// 返回选中的国家信息
+const getCurrentValue = (): SelectedValue | null => {
+    return selected.value ? {...selected.value} : null;
+}
+// 暴露给外部的接口
+defineExpose({ getCurrentValue });
+
 onMounted(() => {
     generateCountryOptions();
     applyInitialSelection();
+    !props.defaultValue && getCodeByIp();
 
     document.addEventListener("click", (e: any) => {
         if (!e?.target?.closest(".cdcs")) {
@@ -292,6 +314,7 @@ onMounted(() => {
 .cdcs-code {
     margin: 0 3px;
     font-size: 14px;
+    line-height: 1.5;
 }
 
 .cdcs-icon {

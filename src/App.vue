@@ -3,15 +3,21 @@ import { ref } from 'vue'
 import DialCodeSelector from './components/DialCodeSelector.vue'
 
 const value = ref()
+const dialCodeRef = ref()
 
 const handleSelect = (v: any) => {
   value.value = v
+  
+  if (dialCodeRef.value) {
+    const country = dialCodeRef.value?.getCurrentValue()
+    console.log(country);
+  }
 }
 </script>
 
 <template>
   <div class="demo">
-    <DialCodeSelector clearable @select="handleSelect">
+    <DialCodeSelector ref="dialCodeRef" clearable @select="handleSelect">
       <template #empty>
         <div>empty</div>
       </template>

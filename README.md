@@ -54,7 +54,13 @@ const handleSelect = (value) => {
 
 | 事件名 | 说明 | 回调参数 | 是否必填 |
 | --- | --- | --- | --- |
-| select | 当用户选择一个国家时触发。事件对象包含 alpha2 (国家代码)、dialCode (电话区号) | function(value: { alpha2: string; dialCode: string }) | 否 |
+| select | 当用户选择一个国家时触发。事件对象包含 alpha2 (国家代码)、dialCode (电话区号)、name(国家全称) | function(value: { alpha2: string; dialCode: string, name: string }) | 否 |
+
+## 方法
+
+| 方法名 | 说明 |
+| --- | --- |
+| getCurrentValue | 获取当前选择的国家信息 |
 
 ## 插槽
 
