@@ -140,7 +140,7 @@ function positionPanel() {
     if (cdcsContainer.value) {
         const { top, bottom } = cdcsContainer.value.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        const panelHeight = 340; // 假设面板高度为340px
+        const panelHeight = 260; // 假设面板高度为260px
 
         // 计算容器与视口顶部和底部的距离
         const distanceToTop = top;
@@ -246,11 +246,16 @@ onMounted(() => {
         <transition name="cdcs-panel">
             <div
                 :class="['cdcs-panel', DialCodeSelectorProps.panelClass]"
-                v-if="open">
-                <input
-                    class="cdcs-search"
-                    v-model="search"
-                    placeholder="Search" />
+                v-if="open"
+            >
+                <div class="cdcs-search">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#000" d="M3 17.962v-1h9.558v1zm0-4.789v-1h4.462v1zm0-4.788v-1h4.462v1zM20.292 18l-3.888-3.83q-.543.405-1.178.627q-.636.222-1.303.222q-1.684 0-2.87-1.164q-1.188-1.164-1.188-2.845t1.188-2.845Q12.242 7 13.928 7t2.869 1.165T17.981 11q0 .667-.222 1.303q-.223.636-.648 1.159L21 17.292zm-6.369-3.98q1.274 0 2.166-.876q.892-.875.892-2.135t-.892-2.134T13.923 8t-2.166.875t-.892 2.135t.892 2.134t2.166.875"/></svg>
+                    <input
+                        class="cdcs-search-input"
+                        v-model="search"
+                        placeholder="Search"
+                    />
+                </div>
                 <ul v-if="filtered?.length > 0" class="cdcs-list">
                     <li
                         v-for="o in filtered"
@@ -352,17 +357,27 @@ onMounted(() => {
 }
 
 .cdcs-search {
-    width: 100%;
-    padding: 10px 12px;
-    border: none;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 5px;
     border-bottom: 1px solid #eee;
+}
+.cdcs-search .search-icon {
+    flex-shrink: 0;
+}
+.cdcs-search-input {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    
     outline: none;
     box-sizing: border-box;
     font-size: 14px;
 }
 
 .cdcs-list {
-    max-height: 280px;
+    max-height: 200px;
     overflow: auto;
     list-style: none;
     margin: 0;
@@ -387,6 +402,9 @@ onMounted(() => {
     font-weight: bold;
 }
 
+.cdcs-item .fi {
+    min-width: 1.333333em;
+}
 .cdcs-dial {
     color: #333;
 }
