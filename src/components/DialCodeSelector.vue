@@ -135,29 +135,29 @@ function toggle() {
 }
 
 const cdcsContainer = ref<HTMLElement | null>(null);
-const panelTop = ref(0);
-const panelBottom = ref(0);
 
 function positionPanel() {
     if (cdcsContainer.value) {
         const { top, bottom } = cdcsContainer.value.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        const panelHeight = 340; // 假设面板高度为300px
-        panelTop.value = top + windowHeight;
-        panelBottom.value = bottom + panelHeight;
-        if (panelBottom.value > windowHeight) {
-            // 面板向下展开会超出视口，向上展开
-            // 这里假设通过添加特定类来实现向上展开
-            // 你需要在 CSS 中定义相应的样式
+        const panelHeight = 340; // 假设面板高度为340px
+
+        // 计算容器与视口顶部和底部的距离
+        const distanceToTop = top;
+        const distanceToBottom = windowHeight - bottom;
+
+        if (distanceToBottom < panelHeight && distanceToTop >= distanceToBottom) {
+            // 如果组件靠近视口底部且视口顶部有足够的空间，优先向上展开
             cdcsContainer.value.classList.add("panel-up");
             cdcsContainer.value.classList.remove("panel-down");
         } else {
-            // 否则，向下展开
+            // 否则，优先向下展开
             cdcsContainer.value.classList.add("panel-down");
             cdcsContainer.value.classList.remove("panel-up");
         }
     }
 }
+
 const showDeleteButton = ref(false);
 
 function clearSelection() {
