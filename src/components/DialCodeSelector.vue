@@ -257,12 +257,17 @@ onMounted(() => {
                         :key="o.alpha2"
                         class="cdcs-item"
                         :class="{'highlight': o.alpha2 === selected?.alpha2}"
-                        @click="pick(o)">
-                        <span
-                            class="fi"
-                            :class="'fi-' + o.alpha2" />
-                        <span class="cdcs-name">{{ o.name }}</span>
-                        <span class="cdcs-dial">{{ o.dialCode }}</span>
+                        @click="pick(o)"
+                    >
+                        <slot
+                            name="option"
+                            :item="o"
+                            :isSelected="o.alpha2 === selected?.alpha2" :pick="pick"
+                        >
+                            <span :class="['fi',`fi-${o.alpha2}`]" />
+                            <span class="cdcs-name">{{ o.name }}</span>
+                            <span class="cdcs-dial">{{ o.dialCode }}</span>
+                        </slot>
                     </li>
                 </ul>
                 <slot v-else name="empty">
@@ -378,7 +383,8 @@ onMounted(() => {
 }
 
 .cdcs-item.highlight {
-    background: #e0f7fa; /* 绿色高亮背景色 */
+    background: #e0f7fa;
+    font-weight: bold;
 }
 
 .cdcs-dial {

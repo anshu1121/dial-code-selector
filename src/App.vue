@@ -18,9 +18,14 @@ const handleSelect = (v: any) => {
 <template>
   <div class="demo">
     <DialCodeSelector ref="dialCodeRef" clearable @select="handleSelect">
+      <!-- <template #option="{ item }">
+        <span :class="['fi', `fi-${item.alpha2}`]" />
+        <p>{{ item.name }}</p>
+        <p>{{ item.dialCode }}</p>
+      </template>
       <template #empty>
         <div>empty</div>
-      </template>
+      </template> -->
     </DialCodeSelector>
     <div class="preview">
       <span v-if="value" class="fi" :class="'fi-' + value.alpha2" />

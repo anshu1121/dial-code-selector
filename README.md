@@ -19,7 +19,7 @@ import 'flag-icons/css/flag-icons.min.css';
 
 在你的Vue3项目中，可以在任何Vue组件中使用 DialCodeSelector 组件：
 
-```vue
+```html
 <template>
   <dial-code-selector ref="dialCodeRef" clearable @select="handleSelect">
   <div v-if="selectedValue">
@@ -78,7 +78,25 @@ const handleSelect = (value) => {
 
 | 插槽名 | 说明 | 是否必填 |
 | --- | --- | --- |
+| option | 自定义下拉列表项 | 否 |
 | empty | 无匹配结果时显示的内容 | 否 |
+
+ `option` 插槽参数
+
+| 参数名 | 类型 | 说明 |
+| --- | --- | --- |
+| item | { alpha2: string; name: string; dialCode: string } | 下拉项数据 |
+| isSelected | boolean | 当前项是否选中 |
+| pick | function | 选中当前项的回调函数 |
+
+## 国旗图标说明
+
+- 国旗图标的渲染使用了flag-icons图标库，确保在项目中正确引入flag-icons的CSS文件。
+- 如果使用下拉项插槽，则需要为元素添加fi类名，并使用flag-icons提供的字体图标,如:
+
+```html
+<span :class="['fi', 'fi-'+item.alpha2]" />
+```
 
 ## 依赖
 
